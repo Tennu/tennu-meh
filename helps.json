@@ -1,0 +1,16 @@
+{
+    "meh": {
+        "*": [
+            "!meh",
+            "Returns todays deal."
+        ],
+        "video": [
+            "!meh",
+            "Returns the video for todays deal."
+        ],
+        "poll": [
+            "!meh",
+            "Returns the poll for todays deal."
+        ]
+    }
+}
