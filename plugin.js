@@ -55,7 +55,24 @@ var TennuMeh = {
         function getSummary(IRCMessage) {
             return meh.getCurrentDealJSON()
                 .then(function(mehDealObj) {
-                    return format("%s - %s", mehDealObj.deal.title, mehDealObj.deal.url);
+                    
+                    var price = "";
+                    
+                    if(mehDealObj.deal.items.length === 1){
+                        price = "$" + mehDealObj.deal.items[0].price;
+                    } else {
+                        var prices = mehDealObj.deal.items.map(function(item){
+                            return item.price;
+                        });
+                        
+                        var maxPrice = Math.max(...prices);
+                        var minPrice = Math.min(...prices);
+                        
+                        price = format("$%s-$%s", minPrice, maxPrice);
+                        
+                    }
+                    
+                    return format("(%s) %s - %s", price, mehDealObj.deal.title, mehDealObj.deal.url);
                 });
         }
 
