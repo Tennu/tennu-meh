@@ -56,11 +56,10 @@ var TennuMeh = {
             return meh.getCurrentDealJSON()
                 .then(function(mehDealObj) {
                     
-                    var price = "";
+                    var price = "$" + mehDealObj.deal.items[0].price;;
                     
-                    if(mehDealObj.deal.items.length === 1){
-                        price = "$" + mehDealObj.deal.items[0].price;
-                    } else {
+                    if(mehDealObj.deal.items.length > 1){
+
                         var prices = mehDealObj.deal.items.map(function(item){
                             return item.price;
                         });
@@ -68,7 +67,9 @@ var TennuMeh = {
                         var maxPrice = Math.max(...prices);
                         var minPrice = Math.min(...prices);
                         
-                        price = format("$%s-$%s", minPrice, maxPrice);
+                        if(maxPrice !== minPrice){
+                            price = format("$%s-$%s", minPrice, maxPrice);  
+                        }
                         
                     }
                     
