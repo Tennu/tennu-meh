@@ -1,5 +1,6 @@
 var format = require("util").format;
 var Promise = require("bluebird");
+var errors = require("./lib/errors");
 var moment = require("moment");
 
 var errorReponse = function(message) {
@@ -26,18 +27,26 @@ var TennuMeh = {
             key = process.env[mehConfig["env-key-name"]];
         }
         else {
-            mehConfig["key"];
+            // If they dont set the value of env-key-name we pull the key directly from the config
+            key = mehConfig["key"];
         }
-
+        
+        if(typeof key === "undefined" || key === ""){
+            throw Error('[ tennu-meh: is missing its API key. Set the key in "meh"."key" or set the key on an env var and pass the name to "meh"."env-key-name"]');
+        }
+        
         var meh = require("./lib/meh")(key);
 
         var router = function(IRCMessage) {
             return Promise.try(function() {
+                
                 if (!IRCMessage.args[0]) {
                     return getSummary();
                 }
+                
+                var subCommand = IRCMessage.args[0];
 
-                switch (IRCMessage.args[0]) {
+                switch (subCommand) {
                     case "video":
                         return getVideo();
                         break;
@@ -45,11 +54,12 @@ var TennuMeh = {
                         return getPoll();
                         break;
                     default:
-                        return errorReponse("Tennu-Meh: Sub command not found.");
+                        throw new errors.subCommandNotFoundError(format("Tennu-Meh: Sub command '%s' not found.", subCommand));
                 }
-            }).catch(function(err) {
-                return errorReponse(err);
-            });
+            })
+            .catch(function(err) {
+                return errorReponse(err.message);
+            });            
         }
 
         function getSummary(IRCMessage) {
