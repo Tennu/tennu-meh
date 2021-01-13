@@ -23,7 +23,7 @@ var TennuMeh = {
         var mehConfig = client.config("meh");
 
         var key = "";
-        if (mehConfig["env-key-name"].length > 0) {
+        if (mehConfig["env-key-name"]?.length > 0) {
             key = process.env[mehConfig["env-key-name"]];
         }
         else {
