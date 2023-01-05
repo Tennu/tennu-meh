@@ -11,7 +11,8 @@ Results cached for a 60 second non-configurable limit. As per rules set by Meh.c
 ```Javascript
 "meh": {
  "env-key-name": "",
- "key": "XXXXXXXXXXXXXXXXXX"
+ "key": "XXXXXXXXXXXXXXXXXX",
+ "baseUri": "https://meh.com/api",
 }
 ```
 
